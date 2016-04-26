@@ -2,24 +2,41 @@
 body {
     padding-bottom: 20px;
     padding-top: 20px;
-    background-image: url(img/bg_pattern.png);
+
+}
+.container {
+    border: 0px solid #000000;
 }
 /* Making header bottom border */
 .header {
     padding-bottom: 20px;
-    border-bottom: 1px solid #31b0d5;
+    border-bottom: 1px solid #337ab7;
 }
 
 /* Make the masthead heading the same height as the navigation */
 .header h3 {
+    font-family: "Helvetica Neue";
+    color: #337ab7;
     margin-top: 0;
     margin-bottom: 0;
     line-height: 40px;
+}
+.logo {
+    border: 3px solid #337ab7;
+    width: 120px;
+    text-align: center;
 }
 /* Custom jumbotron style */
 .jumbotron {
     margin-top: 20px;
     text-align: center;
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#f2f2f2+0,d3d3d3+100 */
+    background: #f2f2f2; /* Old browsers */
+    background: -moz-linear-gradient(top,  #f2f2f2 0%, #d3d3d3 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top,  #f2f2f2 0%,#d3d3d3 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom,  #f2f2f2 0%,#d3d3d3 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f2f2', endColorstr='#d3d3d3',GradientType=0 ); /* IE6-9 */
+
 }
 /* Jumbotron download button style*/
 .jumbotron .btn {
@@ -37,27 +54,33 @@ body {
     width: 100%;
 }
 .text{
-    margin-top: 0;
-    margin-bottom: 0;
-    line-height: 150px;
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+
 }
-.left img{
+.feature img{
     border: 0px solid #31b0d5;
     width: 200px;
     height: 150px;
+}
+.left img{
     margin-right: 20px;
     float: left;
 }
 /* Right one */
 .right img{
-    border: 0px solid #31b0d5;
-    width: 200px;
-    height: 150px;
     margin-left: 20px;
     float: right;
 }
 .right .text{
     float:right;
+}
+.footer {
+    padding-top: 19px;
+    color: #777;
+    border-top: 1px solid #e5e5e5;
+
 }
 
 /* Responsive: Portrait tablets and up */
