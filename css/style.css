@@ -42,7 +42,7 @@ body {
     line-height: 150px;
 }
 .left img{
-    border: 2px solid #31b0d5;
+    border: 0px solid #31b0d5;
     width: 200px;
     height: 150px;
     margin-right: 20px;
@@ -50,7 +50,7 @@ body {
 }
 /* Right one */
 .right img{
-    border: 2px solid #31b0d5;
+    border: 0px solid #31b0d5;
     width: 200px;
     height: 150px;
     margin-left: 20px;
