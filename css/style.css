@@ -1,14 +1,79 @@
+/* Giving some space and bg for page*/
 body {
     padding-bottom: 20px;
     padding-top: 20px;
+    background-image: url(img/bg_pattern.png);
 }
-
+/* Making header bottom border */
 .header {
     padding-bottom: 20px;
     border-bottom: 1px solid #31b0d5;
 }
 
+/* Make the masthead heading the same height as the navigation */
+.header h3 {
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: 40px;
+}
+/* Custom jumbotron style */
 .jumbotron {
     margin-top: 20px;
     text-align: center;
+}
+/* Jumbotron download button style*/
+.jumbotron .btn {
+    padding: 12px 24px;
+    font-size: 21px;
+}
+
+
+/* Features style*/
+
+/* Left one */
+.feature {
+    margin-top: 20px;
+    display: inline-block;
+    width: 100%;
+}
+.text{
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: 150px;
+}
+.left img{
+    border: 2px solid #31b0d5;
+    width: 200px;
+    height: 150px;
+    margin-right: 20px;
+    float: left;
+}
+/* Right one */
+.right img{
+    border: 2px solid #31b0d5;
+    width: 200px;
+    height: 150px;
+    margin-left: 20px;
+    float: right;
+}
+.right .text{
+    float:right;
+}
+
+/* Responsive: Portrait tablets and up */
+@media screen and (min-width: 768px) {
+    /* Remove the padding we set earlier */
+    .header,
+    .footer {
+        padding-right: 0;
+        padding-left: 0;
+    }
+    /* Space out the masthead */
+    .header {
+        margin-bottom: 30px;
+    }
+    /* Remove the bottom border on the jumbotron for visual effect */
+    .jumbotron {
+        border-bottom: 0;
+    }
 }
