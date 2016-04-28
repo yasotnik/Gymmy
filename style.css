@@ -1,0 +1,101 @@
+
+/* Giving some space and bg for page*/
+body {
+    padding-bottom: 20px;
+    padding-top: 20px;
+
+}
+.container {
+    border: 5px solid #000000;
+}
+/* Making header bottom border */
+.header {
+    padding-bottom: 20px;
+    border-bottom: 1px solid #337ab7;
+}
+
+/* Make the masthead heading the same height as the navigation */
+.header h3 {
+    font-family: "Helvetica Neue";
+    color: #337ab7;
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: 40px;
+}
+.logo {
+    border: 3px solid #337ab7;
+    width: 120px;
+    text-align: center;
+}
+/* Custom jumbotron style */
+.jumbotron {
+    margin-top: 20px;
+    text-align: center;
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#f2f2f2+0,d3d3d3+100 */
+    background: #f2f2f2; /* Old browsers */
+    background: -moz-linear-gradient(top,  #f2f2f2 0%, #d3d3d3 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top,  #f2f2f2 0%,#d3d3d3 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom,  #f2f2f2 0%,#d3d3d3 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f2f2', endColorstr='#d3d3d3',GradientType=0 ); /* IE6-9 */
+
+}
+/* Jumbotron download button style*/
+.jumbotron .btn {
+    padding: 12px 24px;
+    font-size: 21px;
+}
+
+
+/* Features style*/
+
+/* Left one */
+div {
+    margin-top: 20px;
+    display: inline-block;
+    
+}
+.text{
+    display: inline-block;
+    vertical-align: middle;
+    }
+
+.category {
+position:relative;
+display: inline-block;
+float:left;
+padding: 5px;
+}
+.categoryLeft {
+position:relative;
+display: inline-block;
+float:left;
+padding: 5px;
+margin-left: 50px;
+}
+.categoryRight {
+position:relative;
+display: inline-block;
+float:left;
+padding: 5px;
+margin-right: 50px;
+}    
+
+
+
+/* Responsive: Portrait tablets and up */
+@media screen and (min-width: 768px) {
+    /* Remove the padding we set earlier */
+    .header,
+    .footer {
+        padding-right: 0;
+        padding-left: 0;
+    }
+    /* Space out the masthead */
+    .header {
+        margin-bottom: 30px;
+    }
+    /* Remove the bottom border on the jumbotron for visual effect */
+    .jumbotron {
+        border-bottom: 0;
+    }
+}
