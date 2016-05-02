@@ -51,41 +51,39 @@ body {
 
 
 /* Features style*/
-
+.center {
+     float: none;
+     margin-left: auto;
+     margin-right: auto;
+}
 /* Left one */
 .feature {
-    margin-top: 20px;
-    display: inline-block;
-    width: 100%;
-}
-.text{
-    display: inline-block;
-    vertical-align: middle;
-    float: none;
-
+    text-align: center;
+    margin-top: 40px;
 }
 .feature img{
     border: 0px solid #31b0d5;
     width: 200px;
     height: 150px;
 }
-.left img{
-    margin-right: 20px;
-    float: left;
+.f-text {
+    margin-top: 10px
 }
-/* Right one */
-.right img{
-    margin-left: 20px;
-    float: right;
+/* Deiverable download*/
+.deliv {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e5e5e5;
+    text-align: center;
 }
-.right .text{
-    float:right;
-}
+
+/* Footer with top border*/
 .footer {
     margin-top: 20px;
     padding-top: 20px
     color: #777;
     border-top: 1px solid #e5e5e5;
+
 
 }
 
@@ -96,6 +94,7 @@ body {
     .footer {
         padding-right: 0;
         padding-left: 0;
+        text-align: center;
     }
     /* Space out the masthead */
     .header {
@@ -109,7 +108,7 @@ body {
 
 
 /* Responsive: Portrait mobiles */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 480px) {
     body {
         padding-top: 5px;
         padding-bottom: 5px;
