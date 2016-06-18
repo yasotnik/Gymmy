@@ -1,7 +1,6 @@
 from flask import Flask, render_template, abort, request, redirect, url_for, jsonify, session, escape
 from flask_bootstrap import Bootstrap
 import os, hashlib
-import db_actions
 import sqlite3
 
 app = Flask(__name__)
@@ -60,9 +59,7 @@ def signup():
     conn = sqlite3.connect(database)
     cursor = conn.cursor()
     cursor.execute("INSERT INTO users (id, password) VALUES (?,?)", (username, pass_md5))
-    conn.commit()
     conn.close()
-    db_actions.add_user(username, pass_md5)
 
 
 if __name__ == '__main__':
