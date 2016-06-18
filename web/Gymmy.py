@@ -1,7 +1,7 @@
 from flask import Flask, render_template, abort, request, redirect, url_for, jsonify, session, escape
 from flask_bootstrap import Bootstrap
 import flask.ext.login as flask_login
-import os
+import os, hashlib
 
 app = Flask(__name__)
 Bootstrap(app)
@@ -28,8 +28,14 @@ def index():
 def login():
     if request.method == 'POST':
         session['username'] = request.form['username']
+        phrase = request.form['password']
+        m = hashlib.md5()
+        m.update(phrase)
+        pass_md5 = m.hexdigest()
+        session['password'] = pass_md5
         username = session['username']
-        print ("USERNAME:" + username)
+        password = session['password']
+        print ("USERNAME:" + username + ",password:" + password)
     return render_template('index.html', name=username, logged=True)
 
 
