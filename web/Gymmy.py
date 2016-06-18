@@ -1,7 +1,8 @@
 from flask import Flask, render_template, abort, request, redirect, url_for, jsonify, session, escape
 from flask_bootstrap import Bootstrap
 import os, hashlib
-
+import db_actions
+import sqlite3
 
 app = Flask(__name__)
 Bootstrap(app)
@@ -40,6 +41,28 @@ def login():
 def logout():
     session.pop('username', None)
     return redirect(url_for('index'))
+
+
+@app.route('/sign_up.html')
+def signup_page():
+    return render_template('sign_up.html')
+
+
+@app.route('/signup', methods=['POST', 'GET'])
+def signup():
+    username = str(request.form['username'])
+    password = str(request.form['password'])
+    m = hashlib.md5()
+    m.update(password)
+    pass_md5 = m.hexdigest()
+    print pass_md5
+    database = 'static/DB'
+    conn = sqlite3.connect(database)
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO users (id, password) VALUES (?,?)", (username, pass_md5))
+    conn.commit()
+    conn.close()
+    db_actions.add_user(username, pass_md5)
 
 
 if __name__ == '__main__':

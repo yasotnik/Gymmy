@@ -1,5 +1,6 @@
 import sqlite3
 
+
 def connect_to_db(database):
     """
     Connecting to specific database
@@ -8,9 +9,9 @@ def connect_to_db(database):
     """
     try:
         return sqlite3.connect(database)
-    except IOError:
+    except Exception:
         print ("DB connection error!")
-        return -1
+        return None
 
 
 def add_user(id,pwd):
@@ -18,4 +19,9 @@ def add_user(id,pwd):
     :param id: username
     :param pwd: password
     """
-    sql = """ INSERT INTO users()"""
+
+    conn = connect_to_db()
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO users (id, password) VALUES (?,?)", (id, pwd))
+    conn.commit()
+    conn.close()
