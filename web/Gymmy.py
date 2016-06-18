@@ -1,13 +1,10 @@
 from flask import Flask, render_template, abort, request, redirect, url_for, jsonify, session, escape
 from flask_bootstrap import Bootstrap
-import flask.ext.login as flask_login
 import os, hashlib
+
 
 app = Flask(__name__)
 Bootstrap(app)
-login_manager = flask_login.LoginManager()
-login_manager.init_app(app)
-
 app.secret_key = os.urandom(24)
 
 
