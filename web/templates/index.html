@@ -14,9 +14,11 @@
 	<div class="wrapper">
 		<form action="{{ url_for('login') }}" method="post" name="Login_Form" class="form-signin">
             {% if logged %}
-                <h3 class="form-signin-heading">{{ name }} Welcome In GYMMY</h3>
+                <h3 class="form-signin-heading">Hello, {{ name }} welcome in GYMMY</h3>
                 <hr class="colorgraph"><br>
+                <h3 class="form-signin-heading"> Led Status: {{ status }} </h3>
                 <a class="btn btn-lg btn-warning btn-block" href="{{ url_for('logout') }}"  name="logout" value="Logout" type="Submit">Logout</a>
+
             {% else %}
                 <h3 class="form-signin-heading">Hello, please Sign In</h3>
 

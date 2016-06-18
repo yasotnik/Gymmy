@@ -1,11 +1,13 @@
 from flask import Flask, render_template, abort, request, redirect, url_for, jsonify, session, escape
 from flask_bootstrap import Bootstrap
 import os, hashlib
-import sqlite3
+import db_actions
+import socket
 
 app = Flask(__name__)
 Bootstrap(app)
 app.secret_key = os.urandom(24)
+led_status = 'Off'
 
 
 @app.route('/')
@@ -15,25 +17,24 @@ def mainpage():
 
 @app.route('/index.html', methods=['POST', 'GET'])
 def index():
-    if 'username' in session:
-        username = session['username']
-        return render_template('index.html', logged=True, name=username)
     return render_template('index.html', logged=False)
 
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
-        session['username'] = request.form['username']
-        phrase = request.form['password']
+        username = request.form['username']
+        password = request.form['password']
         m = hashlib.md5()
-        m.update(phrase)
-        pass_md5 = m.hexdigest()
-        session['password'] = pass_md5
-        username = session['username']
-        password = session['password']
+        m.update(password)
+        password = m.hexdigest()
         print ("USERNAME:" + username + ",password:" + password)
-    return render_template('index.html', name=username, logged=True)
+        pwd_md5 = db_actions.get_user(username)
+        print pwd_md5[0]
+        if pwd_md5[0] == password:
+            print "LOGGED"
+            return render_template('index.html', logged=True, name=username)
+    return render_template('index.html', name=username, logged=False)
 
 
 @app.route('/logout')
@@ -55,12 +56,27 @@ def signup():
     m.update(password)
     pass_md5 = m.hexdigest()
     print pass_md5
-    database = 'static/DB'
-    conn = sqlite3.connect(database)
-    cursor = conn.cursor()
-    cursor.execute("INSERT INTO users (id, password) VALUES (?,?)", (username, pass_md5))
+    db_actions.add_user(username,pass_md5)
+    return render_template('index.html', logged=True, name=username)
+
+
+def led():
+    sock = socket.socket()
+    sock.bind(('', 6666))
+    sock.listen(1)
+    conn, addr = sock.accept()
+    print 'Connected from ', addr
+
+    while True:
+        data = conn.recv(256)
+        if not data:
+            break
+
+        conn.send('next')
+
     conn.close()
 
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
+    led()
