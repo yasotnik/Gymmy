@@ -1,22 +1,28 @@
 body {
   background-image: url('bg_main.jpg');
-
 }
 
-
 .wrapper {
-
 	margin-top: 80px;
 	margin-bottom: 20px;
 }
 
 .form-signin {
   max-width: 420px;
+  min-height: 300px;
   padding: 30px 38px 66px;
   margin: 0 auto;
   background-color: #eee;
-  border: 3px dotted rgba(0,0,0,0.1);
+  border-radius: 5px;
+  border: 3px rgba(0,0,0,0.1);
   }
+
+.form-signin .error {
+  font-size: 14px;
+  position: relative;
+  text-align:center;
+  color: red;
+}
 
 .form-signin-heading {
   text-align:center;
@@ -28,6 +34,10 @@ body {
   font-size: 16px;
   height: auto;
   padding: 10px;
+}
+
+.btn-logout {
+  margin-top: 10px;
 }
 
 input[type="text"] {
