@@ -1,18 +1,12 @@
-import sqlite3
+import MySQLdb
 
 
 def connect_to_db():
-    """
-    Connecting to specific database
-    :param database: Name of the DB
-    :return: -1 if could not connect to DB
-    """
-    database = 'static/DB'
     try:
-        return sqlite3.connect(database)
+        db = MySQLdb.connect("192.168.1.67", "lev2", "sasai228", "Gymmy")
+        return db;
     except Exception:
-        print ("DB connection error!")
-        return None
+        print "Connection failed!"
 
 
 def add_user(id,pwd):
@@ -20,24 +14,31 @@ def add_user(id,pwd):
     :param id: username
     :param pwd: password
     """
-    conn = connect_to_db()
-    cursor = conn.cursor()
-    cursor.execute("INSERT INTO users (id, password) VALUES (?,?)", (id, pwd))
-    conn.commit()
-    conn.close()
+    db = connect_to_db()
+    cursor = db.cursor()
+    sql = "INSERT INTO users(id, \
+       password) \
+       VALUES ('%s', '%s')" % \
+       (id, pwd)
+    try:
+        cursor.execute(sql)
+        db.commit()
+    except Exception:
+        print "Couldn't insert"
+    db.close()
 
 
 def get_user(id):
-    """
-    Parsing user credentials from DB
-    :param id: username
-    :return: password
-    """
-    conn = connect_to_db()
-    conn.text_factory = sqlite3.OptimizedUnicode
-    cursor = conn.cursor()
-    sql = "SELECT password FROM users WHERE id = ?"
-    cursor.execute(sql, (str(id), ))
-    password = cursor.fetchone()
-    conn.close()
-    return password
+    db = connect_to_db()
+    cursor = db.cursor()
+    sql = "SELECT password FROM users \
+       WHERE id = '%d'" % (id)
+    try:
+        cursor.execute(sql)
+        password = cursor.fetchone()
+        return password
+    except:
+        print "Couldn't find user"
+        return 0
+    finally:
+        db.close()

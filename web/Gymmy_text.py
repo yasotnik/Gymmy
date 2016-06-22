@@ -1,16 +1,22 @@
 from flask import Flask, render_template, abort, request, redirect, url_for, jsonify, session, escape
 from flask_bootstrap import Bootstrap
+#from flask_socketio import SocketIO
 import os, hashlib
 import db_actions
 import socket
+import threading, multiprocessing
+import thread
 from multiprocessing import Process
 from socket import error as SocketError
 import errno
+
 
 app = Flask(__name__)
 Bootstrap(app)
 app.secret_key = os.urandom(24)
 app.config['SECRET_KEY'] = os.urandom(24)
+led_status = 'Off'
+#socketio = SocketIO(app)
 
 
 @app.route('/')
@@ -20,49 +26,29 @@ def mainpage():
 
 @app.route('/index.html', methods=['POST', 'GET'])
 def index():
-    if 'username' in session:
-        return render_template('index.html', logged=True, name=session['username'])
     return render_template('index.html', logged=False)
 
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
-        session['username'] = request.form['username']
         username = request.form['username']
         password = request.form['password']
-        # Encrypting the password
         m = hashlib.md5()
         m.update(password)
         password = m.hexdigest()
         print ("USERNAME:" + username + ",password:" + password)
-        if db_actions.get_user(username):
-            pwd_md5 = db_actions.get_user(username)
-            if pwd_md5[0] == password:
-                global usrnm
-                usrnm = username
-                print "LOGGED"
-                return render_template('index.html', logged=True, name=username)
-            else:
-                # Comparing password with password from DB
-                print "ERR PWD"
-                return render_template('index.html', logged=False, name=username, error='The password is incorrect')
-        else:
-            # Comparing password with password from DB
-            print "ERR USR"
-            return render_template('index.html', logged=False, name=username, error='This user doesn\'t exist')
-    print "SHIT"
-    return 0
+        pwd_md5 = db_actions.get_user(username)
+        print pwd_md5[0]
+        if pwd_md5[0] == password:
+            print "LOGGED"
+            return render_template('index.html', logged=True, name=username)
+    return render_template('index.html', name=username, logged=False)
 
 
 @app.route('/logout')
 def logout():
     session.pop('username', None)
-    return redirect(url_for('index'))
-
-
-@app.route('/start_training')
-def start_training():
     return redirect(url_for('index'))
 
 
@@ -90,6 +76,7 @@ def server():
     print("Server started!")
     conn, addr = sock.accept()
     print 'Connected from ', addr
+
     while True:
         try:
             data = conn.recv(256)
@@ -104,7 +91,7 @@ def server():
                 else:
                     conn.send('next nothing')
         except SocketError as e:
-            print e
+	    print e
             if e.errno != errno.ECONNRESET:
                 pass
             conn.close()
