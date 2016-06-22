@@ -19,7 +19,7 @@
                 <div>
                     <a class="btn col-md-5 btn-success " href="{{ url_for('start_training') }}" name="start" value="Start" >Start</a>
                     <div class="col-md-2"></div>
-                    <a class="btn col-md-5 btn-danger " href="#" name="stop" value="Stop" >Stop</a>
+                    <a class="btn col-md-5 btn-danger " href="{{ url_for('stop_training') }}" name="stop" value="Stop" >Stop</a>
                 </div>
                 <a class="btn col-md-12 btn-warning btn-logout" href="{{ url_for('logout') }}"  name="logout" value="Logout" type="Submit">Logout</a>
 

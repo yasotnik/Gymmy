@@ -63,6 +63,13 @@ def logout():
 
 @app.route('/start_training')
 def start_training():
+    db_actions.insert_start()
+    return redirect(url_for('index'))
+
+
+@app.route('/stop_training')
+def stop_training():
+    db_actions.insert_stop()
     return redirect(url_for('index'))
 
 
