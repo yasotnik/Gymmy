@@ -1,58 +1,71 @@
-#!/usr/local/bin/python
-
 import RPi.GPIO as GPIO
 import time
-
-__author__ = 'Lev'
-__license__ = "Polito"
+import socket
 
 GPIO.setmode(GPIO.BOARD)
 
-#define the pin that goes to the circuit
-pinLDR = 7
-pinLED = 11
-touch = False 
-
-def rc_time ():
+pinLDR0 = 7
+pinLED0 = 11
+pinLDR1 = 16
+pinLED1 = 18
+d = locals()
+touch0 = False
+touch1 = False
+sock = socket.socket()
+sock.connect(('192.168.1.67', 9092))
+    
+def rc_time (pinLDR):
     count = 0
   
-    #Output on the pin for 
     GPIO.setup(pinLDR, GPIO.OUT)
     GPIO.output(pinLDR, GPIO.LOW)
     time.sleep(0.1)
 
-    #Change the pin back to input
     GPIO.setup(pinLDR, GPIO.IN)
-  
-    #Count until the pin goes high
+
     while (GPIO.input(pinLDR) == GPIO.LOW):
         count += 1
 
     return count
 
-def led(lh):
+def led(lh, pinLED):
     GPIO.setup(pinLED, GPIO.OUT)
     if lh == 1:
         GPIO.output(pinLED, GPIO.HIGH)
     else:
         GPIO.output(pinLED, GPIO.LOW)
 
-#Catch when script is interupted, cleanup correctly
+def touched(id, touch, pin1, data):
+    if touch == False:
+        led(0, pin1)
+        pin = d[str(data)]
+        led(1, pin)
+        touch = True
+        
+def detouched(touch):
+    if touch == True:
+        touch = False
+       
 try:
-    # Main loop
     while True:
-        if rc_time() > 10000:
-            if touch == False:
-                print "Touched"
-                led(1)
-                touch = True
-        else:
-            if touch == True:
-                print "Untouched"
-                led(0)
-                touch = False 
-            
+        data = sock.recv(256)
+        if data == "Start":
+            print data
+            #print ("0: " + str(rc_time(pinLDR0)) + "   1: " + str(rc_time(pinLDR1)))
+            if rc_time(pinLDR0) > 5000:
+                sock.send('0')
+                touched(0, touch0, pinLED0, sock.recv(256))
+            else:
+                detouched(touch0)
+            if rc_time(pinLDR1) > 5000:
+                sock.send('1')
+                touched(1, touch1, pinLED1, sock.recv(256))
+            else:
+                detouched(touch1)
+                
 except KeyboardInterrupt:
-    pass
+    GPIO.cleanup()
+    sock.close()
 finally:
     GPIO.cleanup()
+    sock.close()
