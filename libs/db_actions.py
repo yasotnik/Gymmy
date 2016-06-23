@@ -78,10 +78,15 @@ def insert_stop():
 def get_status(str):
     db = connect_to_db()
     cursor = db.cursor()
-    sql = "SELECT '%s' FROM statistics \
-       WHERE id = 1" % (str)
+    start = "SELECT start FROM statistics \
+       WHERE id = 1"
+    stop = "SELECT stop FROM statistics \
+       WHERE id = 1"
     try:
-        cursor.execute(sql)
+        if (str == "start"):
+           cursor.execute(start)
+        elif (str == "stop"):
+            cursor.execute(stop)
         status = cursor.fetchone()
         return status[0]
     except Exception:
