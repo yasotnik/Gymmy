@@ -1,6 +1,7 @@
 import RPi.GPIO as GPIO
 import time
 import socket
+import db_actions
 
 GPIO.setmode(GPIO.BOARD)
 
@@ -44,13 +45,13 @@ def touched(id, touch, pin1, data):
         
 def detouched(touch):
     if touch == True:
-        touch = False
-       
+        touch = False    
+
 try:
     while True:
-        data = sock.recv(256)
-        if data == "Start":
-            print data
+        time.sleep(1)
+        data = db_actions.get_status("start")[0]
+        if str(data) == "start":
             #print ("0: " + str(rc_time(pinLDR0)) + "   1: " + str(rc_time(pinLDR1)))
             if rc_time(pinLDR0) > 5000:
                 sock.send('0')
@@ -64,8 +65,8 @@ try:
                 detouched(touch1)
                 
 except KeyboardInterrupt:
-    GPIO.cleanup()
     sock.close()
+    pass
 finally:
     GPIO.cleanup()
     sock.close()

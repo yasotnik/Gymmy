@@ -73,13 +73,11 @@ def insert_stop():
 def get_status(str):
     db = connect_to_db()
     cursor = db.cursor()
-    sql = "SELECT '%s' FROM statistics \
-       WHERE id = 1" % (str)
+    sql = "SELECT start FROM statistics \
+       WHERE id = 1" 
     try:
-        print "SKA: "
         cursor.execute(sql)
-        status = cursor.fetchone()        
-        print "SKA: " + status[0]
+        status = cursor.fetchone()
         return status
     except Exception:
         print "Couldn't get status"
