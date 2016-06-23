@@ -15,7 +15,7 @@ i = 0
 touched = ""
 detouched = ""
 pushed = ""
-d = locals()
+start_time = 0
 touch0 = False
 touch1 = False
     
@@ -78,20 +78,20 @@ def checkLDR():
     data = str(db_actions.get_map("Easy"))
     dataArr = data.split(",")
     global i
-    #print dataArr
-    #print "touched: " + str(touched) + "  detouched: " + str(detouched)
+    global start_time
     if i == 0:
         changeLED(dataArr)
     if (touched == dataArr[i]):
+        if (i == 0):
+            start_time = time.time()
         i = i+1
         changeLED(dataArr)
+        
         
 
 try:
     while True:
-        time.sleep(0.5)
         #print ("0: " + str(rc_time(pinLDRA)) + "   1: " + str(rc_time(pinLDRB)))
-       
         data_start = db_actions.get_status("start")
         data_stop = db_actions.get_status("stop")
         print "START: " + (str(data_start)) + "  STOP: " + (str(data_stop))
@@ -107,6 +107,8 @@ try:
             led(0, pinLEDA)
             led(0, pinLEDB)
             i = 0
+            print int(time.time() - start_time)
+            db_actions.delete_stop()
             pass
 except KeyboardInterrupt:
     i = 0
@@ -114,4 +116,3 @@ except KeyboardInterrupt:
 finally:
     i = 0
     GPIO.cleanup()
-# A A B B A B A B;

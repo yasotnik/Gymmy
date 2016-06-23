@@ -17,8 +17,8 @@ def add_user(id,pwd):
     db = connect_to_db()
     cursor = db.cursor()
     sql = "INSERT INTO users(id, \
-       password, grp) \
-       VALUES ('%s', '%s', '0')" % \
+       password) \
+       VALUES ('%s', '%s')" % \
        (id, pwd)
     try:
         cursor.execute(sql)
@@ -41,30 +41,9 @@ def get_user(id):
     try:
         cursor.execute(sql)
         password = cursor.fetchone()
-        return password[0]
+        return password
     except Exception as e:
-        print "Couldn't find user."
-        return False
-    finally:
-        db.close()
-
-
-def get_user_group(id):
-    """
-    Get user group by his id
-    :param id: id of the user
-    :return: group of user or 0 if was a problem
-    """
-    db = connect_to_db()
-    cursor = db.cursor()
-    sql = "SELECT grp FROM users \
-       WHERE id = '%s'" % (id)
-    try:
-        cursor.execute(sql)
-        group = cursor.fetchone()
-        return group[0]
-    except Exception as e:
-        print "Couldn't get group."
+        print "Couldn't find user. Error: " + e
         return 0
     finally:
         db.close()
@@ -95,43 +74,16 @@ def insert_stop():
         print "Couldn't add stop"
     db.close()
 
-
-def start_wr_path(name):
+def delete_stop():
     db = connect_to_db()
     cursor = db.cursor()
-    sql = "UPDATE statistics SET map='%s' WHERE id=1" % (name)
+    sql = "UPDATE statistics SET start='',stop='' WHERE id=1"
     try:
         cursor.execute(sql)
         db.commit()
-        print "MySQL: + Map, name: " + name
+        print "MySQL: + Stop - Start"
     except Exception:
-        print "Couldn't add map"
-    db.close()
-
-
-def stop_wr_path():
-    db = connect_to_db()
-    cursor = db.cursor()
-    sql = "UPDATE statistics SET map='NULL' WHERE id=1"
-    try:
-        cursor.execute(sql)
-        db.commit()
-        print "MySQL: + Map"
-    except Exception:
-        print "Couldn't add map"
-    db.close()
-
-
-def write_new_map(arr,name):
-    db = connect_to_db()
-    cursor = db.cursor()
-    sql = "INSERT INTO map(Difficulty, Map) VALUES ('%s', '%s')" % (arr, name)
-    try:
-        cursor.execute(sql)
-        db.commit()
-        print "MySQL: + New Path, name: " + name
-    except Exception:
-        print "Couldn't add new path " + name
+        print "Couldn't add stop"
     db.close()
 
 
