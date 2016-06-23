@@ -73,14 +73,37 @@ def insert_stop():
 def get_status(str):
     db = connect_to_db()
     cursor = db.cursor()
-    sql = "SELECT start FROM statistics \
+    start = "SELECT start FROM statistics \
+       WHERE id = 1"
+    stop = "SELECT stop FROM statistics \
        WHERE id = 1" 
     try:
-        cursor.execute(sql)
+        if (str == "start"):
+           cursor.execute(start) 
+        elif (str == "stop"):
+            cursor.execute(stop)
         status = cursor.fetchone()
-        return status
+        return status[0]
     except Exception:
         print "Couldn't get status"
         return 0
     finally:
         db.close()
+
+
+def get_map(str):
+    db = connect_to_db()
+    cursor = db.cursor()
+    sql = "SELECT Map FROM map \
+       WHERE Difficulty = '%s'" % (str)
+    try:
+        cursor.execute(sql)
+        map = cursor.fetchone()
+        return map[0]
+    except Exception as e:
+        print "Couldn't get map"
+        return 0
+    finally:
+        db.close()
+
+

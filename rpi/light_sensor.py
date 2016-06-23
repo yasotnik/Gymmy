@@ -49,10 +49,11 @@ def detouched(touch):
 
 try:
     while True:
-        time.sleep(1)
-        data = db_actions.get_status("start")[0]
-        if str(data) == "start":
-            #print ("0: " + str(rc_time(pinLDR0)) + "   1: " + str(rc_time(pinLDR1)))
+        time.sleep(0.5)
+        print ("0: " + str(rc_time(pinLDR0)) + "   1: " + str(rc_time(pinLDR1)))
+        data_start = db_actions.get_status("start")
+        data_stop = db_actions.get_status("stop")
+        if str(data_start) == "start":
             if rc_time(pinLDR0) > 5000:
                 sock.send('0')
                 touched(0, touch0, pinLED0, sock.recv(256))
@@ -63,7 +64,10 @@ try:
                 touched(1, touch1, pinLED1, sock.recv(256))
             else:
                 detouched(touch1)
-                
+        elif str(data_stop) == "stop":
+            led(0, pinLED0)
+            led(0, pinLED1)
+            pass
 except KeyboardInterrupt:
     sock.close()
     pass
