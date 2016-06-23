@@ -18,6 +18,9 @@ pushed = ""
 start_time = 0
 stopped_by_user = 0
 stopped_by_end = 0
+map_name = ""
+new_map_str = ""
+new_map_wrote = 1
 touch0 = False
 touch1 = False
     
@@ -41,14 +44,17 @@ def led(lh, pinLED):
 def touchedF(LDR):
     global touched
     global pushed
+    global new_map_str
     if((LDR[0] > 3000) and (pushed == "")):
         touched = "A"
         pushed = "A"
-        print "Touched: A"
+        new_map_str = new_map_str + "A,"
+        #print "Touched: A"
     if((LDR[1] > 3000) and (pushed == "")):
         touched = "B"
         pushed = "B"
-        print "Touched: B"
+        new_map_str = new_map_str + "B,"
+        #print "Touched: B"
 
 def detouchedF(LDR):
     global detouched
@@ -56,11 +62,11 @@ def detouchedF(LDR):
     if ((pushed == "A") and (LDR[0] < 3000)):
         detouched = "A"
         pushed = ""
-        print "Detouched: A"
+        #print "Detouched: A"
     if ((pushed == "B") and (LDR[1] < 3000)):
         detouched = "B"
         pushed = ""
-        print "Detouched: B"
+        #print "Detouched: B"
         
 def changeLED(dataArr):
     global i
@@ -80,8 +86,8 @@ def changeLED(dataArr):
         db_actions.insert_stop()
     
 
-def checkLDR():
-    data = str(db_actions.get_map("Easy"))
+def checkLDR(track):
+    data = str(db_actions.get_map(str(track)))
     dataArr = data.split(",")
     global i
     global start_time
@@ -102,16 +108,35 @@ try:
         #print ("0: " + str(rc_time(pinLDRA)) + "   1: " + str(rc_time(pinLDRB)))
         data_start = db_actions.get_status("start")
         data_stop = db_actions.get_status("stop")
+        data_map = db_actions.get_new_name()
         #print str(data_start) + str(data_stop)
-        if str(data_start) == "start":
+        if ((str(data_map) != "NULL") and (str(data_stop) == "stop")):
+            if new_map_wrote == 1:
+                new_map_str = ""
+            new_map_wrote = 0
+            map_name = str(data_map)
             LDR[0] = rc_time(pinLDRA)
             LDR[1] = rc_time(pinLDRB)
             touched = ""
             detouched = ""
             detouchedF(LDR)
             touchedF(LDR)
-            checkLDR()            
-        elif (str(data_stop) == "stop"):                
+            print new_map_str
+        if ((str(data_map) == "NULL") and (new_map_wrote == 0)):
+            new_map_str = new_map_str + ";"
+            print new_map_str
+            db_actions.add_new_path(map_name, new_map_str)
+            new_map_wrote = 1
+        if (str(data_start) == "start"):
+            track = db_actions.get_map_status("huec")
+            LDR[0] = rc_time(pinLDRA)
+            LDR[1] = rc_time(pinLDRB)
+            touched = ""
+            detouched = ""
+            detouchedF(LDR)
+            touchedF(LDR)
+            checkLDR(track)            
+        if (str(data_stop) == "stop"):                
             led(0, pinLEDA)
             led(0, pinLEDB)
             i = 0
