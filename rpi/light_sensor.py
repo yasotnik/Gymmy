@@ -16,6 +16,8 @@ touched = ""
 detouched = ""
 pushed = ""
 start_time = 0
+stopped_by_user = 0
+stopped_by_end = 0
 touch0 = False
 touch1 = False
     
@@ -62,6 +64,7 @@ def detouchedF(LDR):
         
 def changeLED(dataArr):
     global i
+    global start_time
     if(dataArr[i] == "A"):
         led(1, pinLEDA)
         led(0, pinLEDB)
@@ -71,6 +74,9 @@ def changeLED(dataArr):
     if(dataArr[i] == ";"):
         led(0, pinLEDB)
         led(0, pinLEDA)
+        stopped_by_end = 1
+        print ("Track ended")
+        db_actions.add_time(int(time.time() - start_time))
         db_actions.insert_stop()
     
 
@@ -84,6 +90,7 @@ def checkLDR():
     if (touched == dataArr[i]):
         if (i == 0):
             start_time = time.time()
+            stopped_by_end = 0
         i = i+1
         changeLED(dataArr)
         
@@ -91,10 +98,11 @@ def checkLDR():
 
 try:
     while True:
+        time.sleep(0.1)
         #print ("0: " + str(rc_time(pinLDRA)) + "   1: " + str(rc_time(pinLDRB)))
         data_start = db_actions.get_status("start")
         data_stop = db_actions.get_status("stop")
-        print "START: " + (str(data_start)) + "  STOP: " + (str(data_stop))
+        #print str(data_start) + str(data_stop)
         if str(data_start) == "start":
             LDR[0] = rc_time(pinLDRA)
             LDR[1] = rc_time(pinLDRB)
@@ -103,12 +111,10 @@ try:
             detouchedF(LDR)
             touchedF(LDR)
             checkLDR()            
-        elif str(data_stop) == "stop":
+        elif (str(data_stop) == "stop"):                
             led(0, pinLEDA)
             led(0, pinLEDB)
             i = 0
-            print int(time.time() - start_time)
-            db_actions.delete_stop()
             pass
 except KeyboardInterrupt:
     i = 0

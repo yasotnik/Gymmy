@@ -74,17 +74,6 @@ def insert_stop():
         print "Couldn't add stop"
     db.close()
 
-def delete_stop():
-    db = connect_to_db()
-    cursor = db.cursor()
-    sql = "UPDATE status SET start='',stop='' WHERE id=1"
-    try:
-        cursor.execute(sql)
-        db.commit()
-    except Exception:
-        print "Couldn't add stop"
-    db.close()
-
 def start_wr_path(name):
     db = connect_to_db()
     cursor = db.cursor()
