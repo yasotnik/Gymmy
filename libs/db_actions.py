@@ -52,7 +52,7 @@ def get_user(id):
 def insert_start():
     db = connect_to_db()
     cursor = db.cursor()
-    sql = "UPDATE statistics SET start='start',stop='' WHERE id=1"
+    sql = "UPDATE status SET start='start',stop='' WHERE id=1"
     try:
         cursor.execute(sql)
         db.commit()
@@ -111,6 +111,22 @@ def add_time(time):
     except Exception:
         print "Couldn't add new time"
     db.close()
+
+
+def get_time():
+    db = connect_to_db()
+    cursor = db.cursor()
+    id_time = "select * from statistics order by id desc;"
+    try:
+        cursor.execute(id_time)
+        id = cursor.fetchone()
+        print "ID: " + id
+        return id
+    except Exception:
+        print "Couldn't get id time"
+        return 0
+    finally:
+        db.close()
 
 
 def get_status(str):

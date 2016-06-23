@@ -45,7 +45,7 @@ def login():
         print (" USERNAME:" + username + ",password:" + password)
         log.write(localtime + "USER LOGIN: Credentials username: " + username + ","
                                                                              "password:" +
-                  password)
+                  password + "\n")
         if db_actions.get_user(username):
             pwd_md5 = db_actions.get_user(username)
             group = db_actions.get_user_group(username)
@@ -54,7 +54,7 @@ def login():
                 usrnm = username
                 print "LOGGED as Admin"
                 log.write(localtime + "USER LOGIN: User logged successfully as:" +
-                          username + ", group: " + group)
+                          username + ", group: " + group + "\n"     )
                 session['admin'] = 'admin'
                 return render_template('index.html', logged=True, name=username,
                                        admin=True)
@@ -93,6 +93,7 @@ def start_training():
 @app.route('/stop_training')
 def stop_training():
     db_actions.insert_stop()
+    db_actions.get_time()
     return render_for_user(session['username'])
 
 
