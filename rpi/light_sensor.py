@@ -1,6 +1,5 @@
 import RPi.GPIO as GPIO
 import time
-import socket
 import db_actions
 import os
 
@@ -13,8 +12,6 @@ pinLED1 = 18
 d = locals()
 touch0 = False
 touch1 = False
-sock = socket.socket()
-sock.connect(('192.168.1.67', 9092))
 pathDBactions = os.path.abspath("../libs/db_actions.py")
     
 def rc_time (pinLDR):
@@ -82,8 +79,6 @@ try:
             led(0, pinLED1)
             pass
 except KeyboardInterrupt:
-    sock.close()
     pass
 finally:
     GPIO.cleanup()
-    sock.close()
