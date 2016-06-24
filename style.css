@@ -7,6 +7,8 @@ body {
 }
 .container {
     border: 5px solid #000000;
+    padding-bottom: 20px;
+    padding-top: 20px;
 }
 /* Making header bottom border */
 .header {
@@ -45,7 +47,13 @@ body {
     font-size: 21px;
 }
 
+.col-sm-4{
+   position:absolute;
+display: inline-block;
 
+padding: 5px;
+margin-left: 50px;    
+}
 /* Features style*/
 
 /* Left one */
@@ -66,19 +74,28 @@ float:left;
 padding: 5px;
 }
 .categoryLeft {
-position:relative;
+position:absolute;
 display: inline-block;
-float:left;
+
 padding: 5px;
 margin-left: 50px;
 }
 .categoryRight {
-position:relative;
+position:absolute;
 display: inline-block;
 float:left;
 padding: 5px;
 margin-right: 50px;
 }    
+
+#block_container
+{
+    text-align:center;
+}
+#bloc1, #bloc2
+{
+    display:inline;
+}
 
 
 
