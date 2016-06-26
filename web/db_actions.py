@@ -29,6 +29,11 @@ def add_user(id,pwd):
 
 
 def get_user(id):
+    """
+    Get user by his id
+    :param id: id of the user
+    :return: password of user or 0 if was a problem
+    """
     db = connect_to_db()
     cursor = db.cursor()
     sql = "SELECT password FROM users \
@@ -37,8 +42,8 @@ def get_user(id):
         cursor.execute(sql)
         password = cursor.fetchone()
         return password
-    except:
-        print "Couldn't find user"
+    except Exception as e:
+        print "Couldn't find user. Error: " + e
         return 0
     finally:
         db.close()
@@ -76,13 +81,27 @@ def get_status(str):
     sql = "SELECT '%s' FROM statistics \
        WHERE id = 1" % (str)
     try:
-        print "SKA: "
         cursor.execute(sql)
-        status = cursor.fetchone()        
-        print "SKA: " + status[0]
-        return status
+        status = cursor.fetchone()
+        return status[0]
     except Exception:
         print "Couldn't get status"
+        return 0
+    finally:
+        db.close()
+
+
+def get_map(str):
+    db = connect_to_db()
+    cursor = db.cursor()
+    sql = "SELECT Map FROM map \
+       WHERE Difficulty = '%s'" % (str)
+    try:
+        cursor.execute(sql)
+        map = cursor.fetchone()
+        return map[0]
+    except Exception as e:
+        print "Couldn't get map"
         return 0
     finally:
         db.close()
