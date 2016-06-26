@@ -1,11 +1,14 @@
-from flask import Flask, render_template, abort, request, redirect, url_for, jsonify, session, escape
-from flask_bootstrap import Bootstrap
-import os, hashlib
-import db_actions
-import socket
-from multiprocessing import Process
-from socket import error as SocketError
 import errno
+import hashlib
+import os
+import socket
+from socket import error as SocketError
+from flask import Flask, render_template, request, redirect, url_for, session
+from flask_bootstrap import Bootstrap
+
+import sys
+sys.path.insert(0, '../libs')
+import db_actions
 
 app = Flask(__name__)
 Bootstrap(app)
@@ -35,11 +38,15 @@ def login():
         m = hashlib.md5()
         m.update(password)
         password = m.hexdigest()
+        global usrnm
         print ("USERNAME:" + username + ",password:" + password)
         if db_actions.get_user(username):
             pwd_md5 = db_actions.get_user(username)
-            if pwd_md5[0] == password:
-                global usrnm
+            if pwd_md5[0] == password and username == "Admin":
+                usrnm = username
+                print "LOGGED AS ADMIN"
+                return render_template('admin.html', logged=True, name=username)
+            elif pwd_md5[0] == password:
                 usrnm = username
                 print "LOGGED"
                 return render_template('index.html', logged=True, name=username)
@@ -121,13 +128,16 @@ def server():
 
 
 def flask():
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0', threaded=True)
 
 
 if __name__ == '__main__':
+    flask()
+    """
     p1 = Process(target=flask)
     p1.start()
     p2 = Process(target=server)
     p2.start()
     p1.join()
     p2.join()
+    """
