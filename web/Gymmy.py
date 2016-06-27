@@ -7,6 +7,7 @@ from flask import Flask, render_template, request, redirect, url_for, session
 from flask_bootstrap import Bootstrap
 
 import sys
+
 sys.path.insert(0, '../libs')
 import db_actions
 
@@ -42,22 +43,31 @@ def login():
         print ("USERNAME:" + username + ",password:" + password)
         if db_actions.get_user(username):
             pwd_md5 = db_actions.get_user(username)
-            if pwd_md5[0] == password and username == "Admin":
+            group = db_actions.get_user_group(username)
+            print "GROUP" + group
+            if pwd_md5 == password and group == 'admin':
+                # Admin page
                 usrnm = username
-                print "LOGGED AS ADMIN"
-                return render_template('admin.html', logged=True, name=username)
-            elif pwd_md5[0] == password:
+                print "LOGGED as Admin"
+                session['admin'] = 'admin'
+                return render_template('index.html', logged=True, name=username,
+                                       admin=True)
+            elif pwd_md5 == password and group != 'admin':
+                # Regular user page
                 usrnm = username
-                print "LOGGED"
-                return render_template('index.html', logged=True, name=username)
+                print "LOGGED as" + usrnm
+                return render_template('index.html', logged=True, name=username,
+                                       admin=False)
             else:
-                # Comparing password with password from DB
+                # Incorrect password
                 print "ERR PWD"
-                return render_template('index.html', logged=False, name=username, error='The password is incorrect')
+                return render_template('index.html', logged=False, name=username,
+                                       error='The password is incorrect')
         else:
-            # Comparing password with password from DB
+            # Incorrect user
             print "ERR USR"
-            return render_template('index.html', logged=False, name=username, error='This user doesn\'t exist')
+            return render_template('index.html', logged=False, name=username,
+                                   error='This user doesn\'t exist')
     print "SHIT"
     return 0
 
@@ -71,13 +81,27 @@ def logout():
 @app.route('/start_training')
 def start_training():
     db_actions.insert_start()
-    return redirect(url_for('index'))
+    return render_for_user(session['username'])
 
 
 @app.route('/stop_training')
 def stop_training():
     db_actions.insert_stop()
-    return redirect(url_for('index'))
+    return render_for_user(session['username'])
+
+
+@app.route('/start_writing', methods=['POST', 'GET'])
+def start_writing():
+    name = str(request.form['mapname'])
+    print "New map name: " + name
+    db_actions.start_wr_path(name)
+    return render_for_user(session['username'])
+
+
+@app.route('/stop_writing')
+def stop_writing():
+    db_actions.stop_wr_path()
+    return render_for_user(session['username'])
 
 
 @app.route('/sign_up.html')
@@ -94,37 +118,19 @@ def signup():
     pass_md5 = m.hexdigest()
     print pass_md5
     db_actions.add_user(username, pass_md5)
-    return render_template('index.html', logged=True, name=username)
+    return redirect(url_for('index'))
 
 
-def server():
-    sock = socket.socket()
-    sock.bind(('', 9092))
-    sock.listen(1)
-    print("Server started!")
-    conn, addr = sock.accept()
-    print 'Connected from ', addr
-    while True:
-        try:
-            data = conn.recv(256)
-            if data:
-                print ("Recieved: " + data)
-                if data == "1":
-                    conn.send("pinLED0")
-                    print ("Sent : " + "pinLED0")
-                elif data == "0":
-                    conn.send("pinLED1")
-                    print ("Sent : " + "pinLED1")
-                else:
-                    conn.send('next nothing')
-        except SocketError as e:
-            print e
-            if e.errno != errno.ECONNRESET:
-                pass
-            conn.close()
-            print("Server restarted!")
-            conn, addr = sock.accept()
-    conn.close()
+def render_for_user(id):
+    if db_actions.get_user_group(id) == 'admin':
+        return render_template('index.html', logged=True, name=session['username'],
+                           admin=True)
+    elif db_actions.get_user_group(id):
+        return render_template('index.html', logged=True, name=session['username'],
+                           admin=False)
+    else:
+        return render_template('index.html', logged=False, name=session['username'],
+                           admin=False)
 
 
 def flask():

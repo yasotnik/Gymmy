@@ -12,29 +12,27 @@
 <div class = "container">
     <div class="bg-blur"></div>
 	<div class="wrapper">
-		<form action="{{ url_for('login') }}" method="post" name="Login_Form" class="form-signin">
-            {% if logged %}
+                <!-- Admin page -->
+                <form action="{{ url_for('start_writing') }}" method="post"
+                      name="Add_map_form"
+                      class="form-signin">
                 <h3 class="form-signin-heading">Hello, my lord - {{ name }} welcome in GYMMY</h3>
                 <hr class="colorgraph"><br>
-                <div>
-                    <a class="btn col-md-5 btn-success " href="{{ url_for('start_training') }}" name="start" value="Start" >Start</a>
-                    <div class="col-md-2"></div>
-                    <a class="btn col-md-5 btn-danger " href="{{ url_for('stop_training') }}" name="stop" value="Stop" >Stop</a>
-                </div>
+                    <input class="btn col-md-7" type="text" class="form-control" name="mapname" placeholder="Name of new map" required="required" />
+                    <button class="btn col-md-5 btn-success" name="stop_wr" value="Add
+                    map" type="submit">Add map</button>
+                    <a class="btn col-md-12 btn-info" href="{{ url_for('stop_writing') }}"
+                       name="start_wr"
+                       value="Write
+                     new map">Write new path</a>
+                    <div class="btns-status">
+                        <a class="btn col-md-5 btn-success " href="{{ url_for('start_training') }}" name="start" value="Start" >Start</a>
+                        <div class="col-md-2"></div>
+                        <a class="btn col-md-5 btn-danger " href="{{ url_for('stop_training') }}" name="stop" value="Stop" >Stop</a>
+                    </div>
+                <br>
                 <a class="btn col-md-12 btn-warning btn-logout" href="{{ url_for('logout') }}"  name="logout" value="Logout" type="Submit">Logout</a>
-
-            {% else %}
-                <h3 class="form-signin-heading">Hello, please Sign In</h3>
-                <span class="error"><center>{{ error }}</center></span>
-                <hr class="colorgraph"><br>
-
-                <input type="text" class="form-control" name="username" placeholder="Username" required="" autofocus="" />
-                <input type="password" class="form-control" name="password" placeholder="Password" required=""/>
-
-                <button class="btn btn-lg btn-success btn-block"  name="Login" value="Login" type="Submit">Login</button>
-                <a class="btn btn-lg btn-primary btn-block" href="{{ url_for('signup_page') }}"  name="signup" value="Signup" >Sign up</a>
-            {% endif %}
-		</form>
+                </form>
 	</div>
 </div>
 {% endblock %}
