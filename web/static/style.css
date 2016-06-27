@@ -9,7 +9,8 @@ body {
 
 .form-signin {
   max-width: 420px;
-  min-height: 400px;
+  height: 450px;
+  min-height: 420px;
   padding: 30px 38px 66px;
   margin: 0 auto;
   background-color: #eee;

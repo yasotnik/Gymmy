@@ -23,7 +23,7 @@ def mainpage():
 
 @app.route('/index.html', methods=['POST', 'GET'])
 def index():
-    if 'username' in session:
+    if 'username' in session and session['admin'] == 'admin':
         return render_template('index.html', logged=True, name=session['username'])
     return render_template('index.html', logged=False)
 
@@ -45,17 +45,19 @@ def login():
             group = db_actions.get_user_group(username)
             if pwd_md5 == password and group == 'admin':
                 # Admin page
+                rows = db_actions.get_difficulties()
                 usrnm = username
                 print "LOGGED as Admin"
                 session['admin'] = 'admin'
                 return render_template('index.html', logged=True, name=username,
-                                       admin=True, showtime=False)
+                                       admin=True, showtime=False, rows=rows)
             elif pwd_md5 == password and group != 'admin':
                 # Regular user page
+                rows = db_actions.get_difficulties()
                 usrnm = username
                 print "LOGGED as" + usrnm
                 return render_template('index.html', logged=True, name=username,
-                                       admin=False)
+                                       admin=False, rows=rows)
             else:
                 # Incorrect password
                 print "ERR PWD"
@@ -104,6 +106,15 @@ def stop_writing():
     return render_for_user(session['username'],'')
 
 
+@app.route('/write_diff')
+def write_diff():
+    name = request.args.get('diff_name')
+    print name
+    db_actions.write_difficulty(name)
+    rows = db_actions.get_difficulties()
+    return render_for_user(session['username'],'',rows)
+
+
 @app.route('/sign_up.html')
 def signup_page():
     return render_template('sign_up.html')
@@ -121,16 +132,16 @@ def signup():
     return redirect(url_for('index'))
 
 
-def render_for_user(id,stattime):
+def render_for_user(id,stattime,rows):
     if db_actions.get_user_group(id) == 'admin':
         return render_template('index.html', logged=True, name=session['username'],
-                           admin=True,time=stattime)
+                           admin=True,time=stattime,rows=rows)
     elif db_actions.get_user_group(id):
         return render_template('index.html', logged=True, name=session['username'],
-                           admin=False,time=stattime)
+                           admin=False,time=stattime,rows=rows)
     else:
         return render_template('index.html', logged=False, name=session['username'],
-                           admin=False)
+                           admin=False,rows=rows)
 
 
 def flask():
