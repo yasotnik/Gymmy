@@ -41,9 +41,9 @@ def get_user(id):
     try:
         cursor.execute(sql)
         password = cursor.fetchone()
-        return password
-    except Exception as e:
-        print "Couldn't find user. Error: " + e
+        return password[0]
+    except Exception:
+        print "Couldn't find user."
         return 0
     finally:
         db.close()
@@ -73,6 +73,7 @@ def insert_stop():
     except Exception:
         print "Couldn't add stop"
     db.close()
+
 
 def start_wr_path(name):
     db = connect_to_db()
@@ -113,15 +114,35 @@ def add_time(time):
     db.close()
 
 
+def get_user_group(id):
+    """
+    Get user group by his id
+    :param id: id of the user
+    :return: group of user or 0 if was a problem
+    """
+    db = connect_to_db()
+    cursor = db.cursor()
+    sql = "SELECT grp FROM users \
+       WHERE id = '%s'" % (id)
+    try:
+        cursor.execute(sql)
+        group = cursor.fetchone()
+        return group[0]
+    except Exception as e:
+        print "Couldn't get group."
+        return 0
+    finally:
+        db.close()
+
+
 def get_time():
     db = connect_to_db()
     cursor = db.cursor()
-    id_time = "select * from statistics order by id desc;"
+    sql = "SELECT * FROM statistics ORDER BY id DESC;"
     try:
-        cursor.execute(id_time)
+        cursor.execute(sql)
         id = cursor.fetchone()
-        print "ID: " + id
-        return id
+        print "ID: " + id[1]
     except Exception:
         print "Couldn't get id time"
         return 0
