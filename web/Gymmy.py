@@ -1,11 +1,8 @@
-import errno
 import hashlib
 import os
-import socket
-from socket import error as SocketError
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_bootstrap import Bootstrap
-
+import time
 import sys
 
 sys.path.insert(0, '../libs')
@@ -15,6 +12,11 @@ app = Flask(__name__)
 Bootstrap(app)
 app.secret_key = os.urandom(24)
 app.config['SECRET_KEY'] = os.urandom(24)
+
+# Logs
+localtime = time.asctime(time.localtime(time.time()))
+log_name = 'log' + localtime
+log = open(log_name, 'w')
 
 
 @app.route('/')
@@ -40,15 +42,19 @@ def login():
         m.update(password)
         password = m.hexdigest()
         global usrnm
-        print ("USERNAME:" + username + ",password:" + password)
+        print (" USERNAME:" + username + ",password:" + password)
+        log.write(localtime + "USER LOGIN: Credentials username: " + username + ","
+                                                                             "password:" +
+                  password)
         if db_actions.get_user(username):
             pwd_md5 = db_actions.get_user(username)
             group = db_actions.get_user_group(username)
-            print "GROUP" + group
             if pwd_md5 == password and group == 'admin':
                 # Admin page
                 usrnm = username
                 print "LOGGED as Admin"
+                log.write(localtime + "USER LOGIN: User logged successfully as:" +
+                          username + ", group: " + group)
                 session['admin'] = 'admin'
                 return render_template('index.html', logged=True, name=username,
                                        admin=True)
@@ -139,11 +145,3 @@ def flask():
 
 if __name__ == '__main__':
     flask()
-    """
-    p1 = Process(target=flask)
-    p1.start()
-    p2 = Process(target=server)
-    p2.start()
-    p1.join()
-    p2.join()
-    """

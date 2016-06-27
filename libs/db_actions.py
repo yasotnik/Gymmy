@@ -86,7 +86,7 @@ def insert_start():
 def insert_stop():
     db = connect_to_db()
     cursor = db.cursor()
-    sql = "UPDATE statistics SET start='',stop='stop' WHERE id=1"
+    sql = "UPDATE status SET start='',stop='stop' WHERE id=1"
     try:
         cursor.execute(sql)
         db.commit()
@@ -99,7 +99,7 @@ def insert_stop():
 def start_wr_path(name):
     db = connect_to_db()
     cursor = db.cursor()
-    sql = "UPDATE statistics SET map='%s' WHERE id=1" % (name)
+    sql = "UPDATE status SET map='%s' WHERE id=1" % (name)
     try:
         cursor.execute(sql)
         db.commit()
@@ -112,7 +112,7 @@ def start_wr_path(name):
 def stop_wr_path():
     db = connect_to_db()
     cursor = db.cursor()
-    sql = "UPDATE statistics SET map='NULL' WHERE id=1"
+    sql = "UPDATE status SET map='NULL' WHERE id=1"
     try:
         cursor.execute(sql)
         db.commit()
@@ -135,12 +135,25 @@ def write_new_map(arr,name):
     db.close()
 
 
+def add_time(time):
+    db = connect_to_db()
+    cursor = db.cursor()
+    sql = "INSERT INTO statistics VALUES (0, '%d')" % (time)
+    try:
+        cursor.execute(sql)
+        db.commit()
+        print "MySQL: + New time"
+    except Exception:
+        print "Couldn't add new time"
+    db.close()
+
+
 def get_status(str):
     db = connect_to_db()
     cursor = db.cursor()
-    start = "SELECT start FROM statistics \
+    start = "SELECT start FROM status \
        WHERE id = 1"
-    stop = "SELECT stop FROM statistics \
+    stop = "SELECT stop FROM status \
        WHERE id = 1"
     try:
         if (str == "start"):
