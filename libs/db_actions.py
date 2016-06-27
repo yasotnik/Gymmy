@@ -139,7 +139,7 @@ def add_new_path(name, map):
     db = connect_to_db()
     cursor = db.cursor()
     sql = "INSERT INTO map \
-       VALUES ('%s', '%s', '0')" % \
+       VALUES ('%s', '%s')" % \
        (name, map)
     try:
         cursor.execute(sql)
