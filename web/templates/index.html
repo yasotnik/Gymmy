@@ -4,69 +4,117 @@
 {{super()}}
 <link rel="stylesheet" href="{{url_for('.static', filename='style.css')}}">
 {% endblock %}
-
 {% block navbar %}
 {% endblock %}
 
 {% block content%}
 <div class = "container">
     <div class="bg-blur"></div>
-	<div class="wrapper">
-
+        <div class="wrapper">
             {% if logged and not admin%}
                 <form action="{{ url_for('login') }}" method="post" name="Login_Form" class="form-signin">
-                <h3 class="form-signin-heading">Hello, {{ name }} welcome in GYMMY</h3>
-                <hr class="colorgraph">
-                <h3 class="form-signin-heading">Your time is: {{ time }}</h3>
-                <div>
-                    <a class="btn col-md-5 btn-success " href="{{ url_for('start_training') }}" name="start" value="Start" >Start</a>
-                    <div class="col-md-2"></div>
-                    <a class="btn col-md-5 btn-danger " href="{{ url_for('stop_training') }}" name="stop" value="Stop" >Stop</a>
-                </div>
-                <a class="btn col-md-12 btn-warning btn-logout" href="{{ url_for('logout') }}"  name="logout" value="Logout" type="Submit">Logout</a>
+                    <h3 class="form-signin-heading">Hello, {{ name }} welcome in GYMMY</h3>
+                    <hr class="colorgraph">
+                    <div class="dropdown">
+                        <button class="btn btn-info dropdown-toggle col-md-12
+                        difficulty"
+                                type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        Choose difficulty
+                        <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu col-md-12" aria-labelledby="dropdownMenu1">
+                            {% for row in rows %}
+                                <li name="diff_name" >
+                                    <a href="{{ url_for('write_diff', diff_name=row[0])}}">{{ row[0] }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class = "time">
+                        <h4 class="time-title">Your time is:</h4>
+                        <div class="time-circle">
+                            {% if time %}
+                                {{ time }}
+                            {% else %}
+                                00
+                            {% endif %}
+                        </div>
+                        <div class="time-sec">
+                            <h4 class="time-title">seconds</h4>
+                        </div>
+                    </div>
+                    <div class = "status">
+                        <a class="btn col-md-5 btn-success " href="{{ url_for
+                        ('start_training') }}" name="start" id="sw_start" value="Start" >Start</a>
+                        <div class="col-md-2"></div>
+                        <a class="btn col-md-5 btn-danger " href="{{ url_for
+                        ('stop_training') }}" name="stop" id="sw_stop" value="Stop"
+                        >Stop</a>
+                    </div>
+                    <div>
+                        <a class="btn col-md-12 btn-warning btn-logout" href="{{ url_for('logout') }}"  name="logout" value="Logout" type="Submit">Logout</a>
+                    </div>
+                    <div class="end"><span></span></div>
                 </form>
             {% elif admin and logged %}
                 <!-- Admin page -->
                 <form action="{{ url_for('start_writing') }}" method="post"
                       name="Add_map_form"
                       class="form-signin">
-                <h3 class="form-signin-heading">Hello, my lord - {{ name }} welcome in GYMMY</h3>
-                <h3 class="form-signin-heading">Your time is: {{ time }}</h3>
-                <hr class="colorgraph">
+                    <h3 class="form-signin-heading">Hello, my lord aka {{ name }}
+                        welcome in GYMMY</h3>
+                    <hr class="colorgraph">
                     <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle col-md-12"
-                                type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        <button class="btn btn-info dropdown-toggle col-md-12
+                        difficulty"
+                                type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                         Choose difficulty
                         <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu col-md-12" aria-labelledby="dropdownMenu1">
-                        {% for row in rows %}
-                        <li name="diff_name" ><a href="{{ url_for('write_diff',
-                        diff_name=row[0])
-                                }}">{{
-                                row[0]
-                                }}</a></li>
-                        {% endfor %}
+                            {% for row in rows %}
+                                <li name="diff_name" >
+                                    <a href="{{ url_for('write_diff', diff_name=row[0])}}">{{ row[0] }}</a>
+                                </li>
+                            {% endfor %}
                         </ul>
                     </div>
-                    <input class="btn col-md-7" type="text" class="form-control" name="mapname" placeholder="Name of new map" required="required" />
-                    <button class="btn col-md-5 btn-success" name="stop_wr" value="Add
-                    map" type="submit">Add map</button>
-                    <a class="btn col-md-12 btn-info" href="{{ url_for('stop_writing') }}"
-                       name="start_wr"
-                       value="Write
-                     new map">Write new path</a>
-                    <div class="btns-status">
+                    <div class = "time">
+                        <h4 class="time-title">Your time is:</h4>
+                        <div class="time-circle">
+                            {% if time %}
+                                {{ time }}
+                            {% else %}
+                                00
+                            {% endif %}
+                        </div>
+                        <div class="time-sec">
+                            <h4 class="time-title">seconds</h4>
+                        </div>
+                    </div>
+                    <div class="new-map">
+                        <input class="btn col-md-7" type="text" class="form-control" name="mapname" placeholder="Name of new map" required="required" />
+                        <button class="btn col-md-5 btn-success" name="stop_wr" value="Add
+                        map" type="submit">Add map</button>
+                        <a class="btn col-md-12 btn-info add-new-path" href="{{ url_for
+                        ('stop_writing') }}"
+                           name="start_wr"
+                           value="Write
+                         new map">Write new path</a>
+                    </div>
+                    <div class = "status">
                         <a class="btn col-md-5 btn-success " href="{{ url_for('start_training') }}" name="start" value="Start" >Start</a>
                         <div class="col-md-2"></div>
                         <a class="btn col-md-5 btn-danger " href="{{ url_for('stop_training') }}" name="stop" value="Stop" >Stop</a>
                     </div>
-                <br>
-                <a class="btn col-md-12 btn-warning btn-logout" href="{{ url_for('logout') }}"  name="logout" value="Logout" type="Submit">Logout</a>
+                    <div>
+                        <a class="btn col-md-12 btn-warning btn-logout" href="{{ url_for('logout') }}"  name="logout" value="Logout" type="Submit">Logout</a>
+                    </div>
+                    <div class="end-admin"><span></span></div>
                 </form>
             {% else %}
                 <form action="{{ url_for('login') }}" method="post" name="Login_Form" class="form-signin">
-                <h3 class="form-signin-heading">Hello, please Sign In</h3>
+                <h3 class="form-signin-heading">Hello, please sign in</h3>
                 <span class="error"><center>{{ error }}</center></span>
                 <hr class="colorgraph"><br>
 
@@ -77,7 +125,6 @@
                 <a class="btn btn-lg btn-primary btn-block" href="{{ url_for('signup_page') }}"  name="signup" value="Signup" >Sign up</a>
                 </form>
             {% endif %}
-
 	</div>
 </div>
 {% endblock %}
