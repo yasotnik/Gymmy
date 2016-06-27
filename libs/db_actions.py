@@ -135,6 +135,20 @@ def get_user_group(id):
         db.close()
 
 
+def add_new_path(name, map):
+    db = connect_to_db()
+    cursor = db.cursor()
+    sql = "INSERT INTO map \
+       VALUES ('%s', '%s', '0')" % \
+       (name, map)
+    try:
+        cursor.execute(sql)
+        db.commit()
+    except Exception:
+        print "Couldn't insert new map"
+    db.close()
+
+
 def get_time():
     db = connect_to_db()
     cursor = db.cursor()

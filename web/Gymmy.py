@@ -14,9 +14,6 @@ app.secret_key = os.urandom(24)
 app.config['SECRET_KEY'] = os.urandom(24)
 
 # Logs
-localtime = time.asctime(time.localtime(time.time()))
-log_name = 'log' + localtime
-log = open(log_name, 'w')
 
 
 @app.route('/')
@@ -43,9 +40,6 @@ def login():
         password = m.hexdigest()
         global usrnm
         print (" USERNAME:" + username + ",password:" + password)
-        log.write(localtime + "USER LOGIN: Credentials username: " + username + ","
-                                                                             "password:" +
-                  password + "\n")
         if db_actions.get_user(username):
             pwd_md5 = db_actions.get_user(username)
             group = db_actions.get_user_group(username)
@@ -53,8 +47,6 @@ def login():
                 # Admin page
                 usrnm = username
                 print "LOGGED as Admin"
-                log.write(localtime + "USER LOGIN: User logged successfully as:" +
-                          username + ", group: " + group + "\n"     )
                 session['admin'] = 'admin'
                 return render_template('index.html', logged=True, name=username,
                                        admin=True, showtime=False)
