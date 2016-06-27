@@ -17,8 +17,8 @@ def add_user(id,pwd):
     db = connect_to_db()
     cursor = db.cursor()
     sql = "INSERT INTO users(id, \
-       password) \
-       VALUES ('%s', '%s')" % \
+       password, grp) \
+       VALUES ('%s', '%s', '0')" % \
        (id, pwd)
     try:
         cursor.execute(sql)
@@ -95,7 +95,7 @@ def stop_wr_path():
     try:
         cursor.execute(sql)
         db.commit()
-        print "MySQL: + Stop - Start"
+        print "MySQL: status map = NULL"
     except Exception:
         print "Couldn't add stop"
     db.close()
@@ -138,13 +138,30 @@ def get_user_group(id):
 def get_time():
     db = connect_to_db()
     cursor = db.cursor()
-    sql = "SELECT * FROM statistics ORDER BY id DESC;"
+    sql = "SELECT * FROM statistics ORDER BY id DESC"
     try:
         cursor.execute(sql)
-        id = cursor.fetchone()
-        print "ID: " + id[1]
+        time = cursor.fetchone()
+
+        return time[1]
     except Exception:
         print "Couldn't get id time"
+        return 0
+    finally:
+        db.close()
+
+
+def get_new_name():
+    db = connect_to_db()
+    cursor = db.cursor()
+    sql = "SELECT map FROM status \
+       WHERE id = 1"
+    try:
+        cursor.execute(sql)
+        status = cursor.fetchone()
+        return status[0]
+    except Exception:
+        print "Couldn't get new map name"
         return 0
     finally:
         db.close()

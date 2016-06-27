@@ -16,7 +16,9 @@
             {% if logged and not admin%}
                 <form action="{{ url_for('login') }}" method="post" name="Login_Form" class="form-signin">
                 <h3 class="form-signin-heading">Hello, {{ name }} welcome in GYMMY</h3>
-                <hr class="colorgraph"><br>
+                <hr class="colorgraph">
+                <h3 class="form-signin-heading">Your time is: {{ time }}</h3>
+                <hr class="colorgraph">
                 <div>
                     <a class="btn col-md-5 btn-success " href="{{ url_for('start_training') }}" name="start" value="Start" >Start</a>
                     <div class="col-md-2"></div>
@@ -30,7 +32,9 @@
                       name="Add_map_form"
                       class="form-signin">
                 <h3 class="form-signin-heading">Hello, my lord - {{ name }} welcome in GYMMY</h3>
-                <hr class="colorgraph"><br>
+                <hr class="colorgraph">
+                <h3 class="form-signin-heading">Your time is: {{ time }}</h3>
+                <hr class="colorgraph">
                     <input class="btn col-md-7" type="text" class="form-control" name="mapname" placeholder="Name of new map" required="required" />
                     <button class="btn col-md-5 btn-success" name="stop_wr" value="Add
                     map" type="submit">Add map</button>

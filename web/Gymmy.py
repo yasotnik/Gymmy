@@ -57,7 +57,7 @@ def login():
                           username + ", group: " + group + "\n"     )
                 session['admin'] = 'admin'
                 return render_template('index.html', logged=True, name=username,
-                                       admin=True)
+                                       admin=True, showtime=False)
             elif pwd_md5 == password and group != 'admin':
                 # Regular user page
                 usrnm = username
@@ -93,8 +93,9 @@ def start_training():
 @app.route('/stop_training')
 def stop_training():
     db_actions.insert_stop()
-    db_actions.get_time()
-    return render_for_user(session['username'])
+    stat = db_actions.get_time()
+    print stat
+    return render_for_user(session['username'], stat)
 
 
 @app.route('/start_writing', methods=['POST', 'GET'])
@@ -102,13 +103,13 @@ def start_writing():
     name = str(request.form['mapname'])
     print "New map name: " + name
     db_actions.start_wr_path(name)
-    return render_for_user(session['username'])
+    return render_for_user(session['username'],'')
 
 
 @app.route('/stop_writing')
 def stop_writing():
     db_actions.stop_wr_path()
-    return render_for_user(session['username'])
+    return render_for_user(session['username'],'')
 
 
 @app.route('/sign_up.html')
@@ -128,13 +129,13 @@ def signup():
     return redirect(url_for('index'))
 
 
-def render_for_user(id):
+def render_for_user(id,stattime):
     if db_actions.get_user_group(id) == 'admin':
         return render_template('index.html', logged=True, name=session['username'],
-                           admin=True)
+                           admin=True,time=stattime)
     elif db_actions.get_user_group(id):
         return render_template('index.html', logged=True, name=session['username'],
-                           admin=False)
+                           admin=False,time=stattime)
     else:
         return render_template('index.html', logged=False, name=session['username'],
                            admin=False)
