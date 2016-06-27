@@ -81,7 +81,8 @@ def logout():
 @app.route('/start_training')
 def start_training():
     db_actions.insert_start()
-    return render_for_user(session['username'])
+    rows = db_actions.get_difficulties()
+    return render_for_user(session['username'],'',rows)
 
 
 @app.route('/stop_training')
@@ -89,15 +90,16 @@ def stop_training():
     db_actions.insert_stop()
     stat = db_actions.get_time()
     print stat
-    return render_for_user(session['username'], stat)
+    return render_for_user(session['username'], stat,'')
 
 
 @app.route('/start_writing', methods=['POST', 'GET'])
 def start_writing():
     name = str(request.form['mapname'])
+    rows = db_actions.get_difficulties()
     print "New map name: " + name
     db_actions.start_wr_path(name)
-    return render_for_user(session['username'],'')
+    return render_for_user(session['username'],'',rows)
 
 
 @app.route('/stop_writing')
