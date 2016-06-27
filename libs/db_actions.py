@@ -202,6 +202,22 @@ def get_status(str):
         db.close()
 
 
+def get_map_status(str):
+    db = connect_to_db()
+    cursor = db.cursor()
+    sql = "SELECT difficulty FROM status \
+       WHERE id = 1"
+    try:
+        cursor.execute(sql)
+        diff = cursor.fetchone()
+        return diff[0]
+    except Exception:
+        print "Couldn't get status difficulty"
+        return 0
+    finally:
+        db.close()
+
+
 def get_map(str):
     db = connect_to_db()
     cursor = db.cursor()
@@ -216,3 +232,30 @@ def get_map(str):
         return 0
     finally:
         db.close()
+
+
+def get_difficulties():
+    db = connect_to_db()
+    cursor = db.cursor()
+    sql = "SELECT * FROM map"
+    try:
+        cursor.execute(sql)
+        rows = cursor.fetchall()
+        return rows
+    except Exception as e:
+        print "Couldn't get difficulties"
+        return 0
+    finally:
+        db.close()
+
+
+def write_difficulty(name):
+    db = connect_to_db()
+    cursor = db.cursor()
+    sql = "UPDATE status SET difficulty='%s' WHERE id=1" % (name)
+    try:
+        cursor.execute(sql)
+        db.commit()
+    except Exception:
+        print "Couldn't insert in3o status"
+    db.close()
