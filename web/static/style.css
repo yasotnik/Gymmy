@@ -3,14 +3,12 @@ body {
 }
 
 .wrapper {
-	margin-top: 80px;
+	margin-top: 30px;
 	margin-bottom: 20px;
 }
 
 .form-signin {
   max-width: 420px;
-  height: 450px;
-  min-height: 420px;
   padding: 30px 38px 66px;
   margin: 0 auto;
   background-color: #eee;
@@ -27,7 +25,6 @@ body {
 
 .form-signin-heading {
   text-align:center;
-  margin-bottom: 30px;
 }
 
 .form-control {
@@ -71,5 +68,52 @@ input[type="password"] {
 }
 
 .status {
-  margin-top: 10px;
+  margin-top: 20px;
+  display: block;
+}
+
+.time-circle {
+  margin: 0 auto;
+  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+  padding: 10px;
+  background: #eeeeee;
+  border: 3px solid #000;
+  text-align: center;
+  color: #000;
+  font: 32px Helvetica, Arial;
+}
+.time-title {
+  text-align:center;
+  color: #000;
+  margin-bottom: 5px;
+}
+.end {
+  height: 60px;
+}
+
+.difficulty {
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.dropdown-menu {
+  margin-top:35px;
+}
+
+.new-map {
+  margin-top: 20px;
+}
+
+.new-map input{
+  margin-bottom: 20px;
+}
+
+.add-new-path{
+  margin-bottom: 20px;
+}
+
+.end-admin {
+  height: 140px;
 }
